@@ -9,7 +9,7 @@ namespace ECommons.Funding;
 public static class PatreonBanner
 {
     public static Func<bool> IsOfficialPlugin = () => false;
-    public static string Text = "♥ Patreon";
+    public static string Text = "♥ Patreon/KoFi";
     public static string DonateLink => "https://www.patreon.com/NightmareXIV";
     public static void DrawRaw()
     {
@@ -117,7 +117,7 @@ public static class PatreonBanner
             {
                 GenericHelpers.ShellStart("https://subscribe.nightmarexiv.com");
             }
-            /*if ("Donate one-time via Ko-Fi")
+            if(ImGui.Selectable("Donate one-time via Ko-Fi"))
             {
                 GenericHelpers.ShellStart("https://donate.nightmarexiv.com");
             }*/

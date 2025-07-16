@@ -1,8 +1,10 @@
-﻿using ECommons.DalamudServices;
+﻿using Dalamud.Utility;
+using ECommons.DalamudServices;
 using ECommons.ImGuiMethods;
 using ECommons.Logging;
 using System;
 using System.IO;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -19,7 +21,26 @@ namespace ECommons.Configuration;
 public static class EzConfig
 {
     public static string? PluginConfigDirectoryOverride { get; set; } = null;
-    public static bool UseExternalWriter = false;
+    public static bool UseExternalWriter
+    {
+        get
+        {
+            return field;
+        }
+        set
+        {
+            if(Util.GetHostPlatform() != OSPlatform.Windows)
+            {
+                field = false;
+                PluginLog.Warning($"External file writer is only supported on Windows. OS detected: {Util.GetHostPlatform()}. External file writer is disabled.");
+            }
+            else
+            {
+                field = value;
+            }
+        }
+    } = false;
+
     public static string GetPluginConfigDirectory()
     {
         if(PluginConfigDirectoryOverride == null) return Svc.PluginInterface.GetPluginConfigDirectory();
@@ -35,7 +56,7 @@ public static class EzConfig
     /// <summary>
     /// Default configuration reference
     /// </summary>
-    public static IEzConfig? Config { get; private set; }
+    public static object? Config { get; private set; }
 
     private static bool WasCalled = false;
 
@@ -62,7 +83,7 @@ public static class EzConfig
     /// </summary>
     /// <typeparam name="T"></typeparam>
     /// <returns></returns>
-    public static T Init<T>() where T : IEzConfig, new()
+    public static T Init<T>() where T : new()
     {
         Config = LoadConfiguration<T>(DefaultSerializationFactory.DefaultConfigFileName);
         return (T)Config;
@@ -73,7 +94,7 @@ public static class EzConfig
     /// </summary>
     /// <typeparam name="T"></typeparam>
     /// <exception cref="NullReferenceException"></exception>
-    public static void Migrate<T>() where T : IEzConfig, new()
+    public static void Migrate<T>() where T : new()
     {
         if(Config != null)
         {
@@ -120,7 +141,7 @@ public static class EzConfig
     /// <param name="appendConfigDirectory">If true, plugin configuration directory will be added to path</param>
     /// <param name="serializationFactory">If null, then default factory will be used.</param>
     /// <param name="writeFileAsync">Whether to perform writing operation in a separate thread. Serialization is performed in current thread.</param>
-    public static void SaveConfiguration(this IEzConfig Configuration, string path, bool prettyPrint = false, bool appendConfigDirectory = true, ISerializationFactory? serializationFactory = null, bool writeFileAsync = false)
+    public static void SaveConfiguration(this object Configuration, string path, bool prettyPrint = false, bool appendConfigDirectory = true, ISerializationFactory? serializationFactory = null, bool writeFileAsync = false)
     {
         WasCalled = true;
         serializationFactory ??= DefaultSerializationFactory;
@@ -198,7 +219,7 @@ public static class EzConfig
     /// <param name="appendConfigDirectory">If true, plugin configuration directory will be added to path</param>
     /// <param name="serializationFactory">If null, then default factory will be used.</param>
     /// <returns></returns>
-    public static T LoadConfiguration<T>(string path, bool appendConfigDirectory = true, ISerializationFactory? serializationFactory = null) where T : IEzConfig, new()
+    public static T LoadConfiguration<T>(string path, bool appendConfigDirectory = true, ISerializationFactory? serializationFactory = null) where T : new()
     {
         WasCalled = true;
         serializationFactory ??= DefaultSerializationFactory;

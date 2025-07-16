@@ -5,6 +5,7 @@ using ECommons.Configuration;
 using ECommons.DalamudServices;
 using ECommons.Events;
 using ECommons.EzContextMenu;
+using ECommons.EzDTR;
 using ECommons.EzEventManager;
 using ECommons.EzHookManager;
 using ECommons.EzIpcManager;
@@ -42,13 +43,9 @@ public static class ECommonsMain
         Instance = instance;
         GenericHelpers.Safe(() => Svc.Init(pluginInterface));
 #if DEBUG
-var type = "debug build without forms";
+var type = "debug build";
 #elif RELEASE
-        var type = "release build without forms";
-#elif DEBUGFORMS
-var type = "debug build with forms";
-#elif RELEASEFORMS
-        var type = "release build with forms";
+        var type = "release build";
 #else
 var type = "unknown build";
 #endif
@@ -145,8 +142,8 @@ var type = "unknown build";
         GenericHelpers.Safe(ContextMenuPrefixRemover.Dispose);
         GenericHelpers.Safe(Purgatory.Purge);
         GenericHelpers.Safe(ExternalWriter.Dispose);
+        GenericHelpers.Safe(EzDtr.DisposeAll);
         //SingletonManager.Dispose();
-        Chat.instance = null;
         Instance = null;
     }
 }

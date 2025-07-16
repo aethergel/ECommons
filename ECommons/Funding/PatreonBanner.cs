@@ -81,19 +81,19 @@ public static class PatreonBanner
     }
 
     private static string PatreonButtonTooltip => $"""
-				If you like {Svc.PluginInterface.Manifest.Name}, please consider supporting it's developer via Patreon or via other means! 
+				{Svc.PluginInterface.Manifest.Name}가 마음에 드셨다면, 개발자의 Patreon 혹은 다른 방법으로 지원하는걸 고려해주세요! 
 				
-				This will help me to update the plugin while granting you access to priority feature requests, priority support, early plugin builds, participation in votes for features and more.
+				이는 플러그인을 개발하는데 도움이 될 것이며 우선적인 기능 요청과 지원, 플러그인 빌드 미리보기, 기능과 다른 것들에 대한 투표 권한 또한 제공합니다. 
 
-				Left click - to go to Patreon;
-				Right click - see all options
+				좌클릭 - Patreon으로 연결
+				우클릭 - 다른 방법 확인
 				""";
 
     private static string SmallPatreonButtonTooltip => $"""
-				If you like {Svc.PluginInterface.Manifest.Name}, please consider supporting it's developer via Patreon.
+				{Svc.PluginInterface.Manifest.Name}가 마음에 드셨다면, Pateron을 통해 개발자를 지원해주세요.
 
-				Left click - to go to Patreon;
-				Right click - see other options
+				좌클릭 - Patreon으로 연결
+				우클릭 - 다른 방법 확인
 				""";
 
     private static void Popup()
@@ -113,7 +113,7 @@ public static class PatreonBanner
         }
         if(ImGui.BeginPopup("NXPS"))
         {
-            if(ImGui.Selectable("Subscribe on Patreon"))
+            if(ImGui.Selectable("Patreon 구독"))
             {
                 GenericHelpers.ShellStart("https://subscribe.nightmarexiv.com");
             }
@@ -121,17 +121,17 @@ public static class PatreonBanner
             {
                 GenericHelpers.ShellStart("https://donate.nightmarexiv.com");
             }*/
-            if(ImGui.Selectable("Donate via Cryptocurrency"))
+            if(ImGui.Selectable("Cryptocurrency로 지원"))
             {
                 GenericHelpers.ShellStart($"https://crypto.nightmarexiv.com/{(IsOfficialPlugin() ? "?" + Svc.PluginInterface.Manifest.Name : "")}");
             }
             if(!IsOfficialPlugin())
             {
-                if(ImGui.Selectable("Join NightmareXIV Discord"))
+                if(ImGui.Selectable("NightmareXIV의 Discord 참가"))
                 {
                     GenericHelpers.ShellStart("https://discord.nightmarexiv.com");
                 }
-                if(ImGui.Selectable("Explore other NightmareXIV plugins"))
+                if(ImGui.Selectable("NightmareXIV의 다른 플러그인 보기"))
                 {
                     GenericHelpers.ShellStart("https://explore.nightmarexiv.com");
                 }
